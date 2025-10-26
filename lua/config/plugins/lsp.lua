@@ -16,10 +16,12 @@ return {
 		},
 		config = function()
 			local capabilities = require('blink.cmp').get_lsp_capabilities()
-			require 'lspconfig'.lua_ls.setup { capabilities = capabilities }
+			vim.lsp.config("lua_ls", {
+				capabilities = capabilities
+			})
+			vim.lsp.enable({ "lua_ls" })
 
-			local lspconfig = require('lspconfig')
-			lspconfig.sourcekit.setup {
+			vim.lsp.config("sourcekit", {
 				capabilities = {
 					workspace = {
 						didChangeWatchedFiles = {
@@ -27,7 +29,8 @@ return {
 						},
 					},
 				},
-			}
+			})
+			vim.lsp.enable({ "sourcekit" })
 
 			vim.diagnostic.config({
 				virtual_text = true,

@@ -15,6 +15,9 @@ return {
 				},
 				extensions = {
 					fzf = {}
+				},
+				file_ignore_patterns = {
+					".build"
 				}
 			}
 
@@ -22,6 +25,7 @@ return {
 
 			vim.keymap.set("n", "<space>fh", require('telescope.builtin').help_tags)
 			vim.keymap.set("n", "<space>ff", require('telescope.builtin').find_files)
+			vim.keymap.set("n", "<space>fs", require('telescope.builtin').live_grep)
 			vim.keymap.set("n", "<space>en", function()
 				require('telescope.builtin').find_files {
 					cwd = vim.fn.stdpath("config")
