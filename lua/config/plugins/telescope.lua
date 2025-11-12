@@ -18,6 +18,12 @@ return {
 				},
 				file_ignore_patterns = {
 					".build"
+				},
+				defaults = {
+					layout_config = { 
+						preview_width = 0.6,
+						width = 0.9
+					}
 				}
 			}
 
