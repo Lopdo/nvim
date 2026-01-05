@@ -39,6 +39,9 @@ require("lazy").setup({
 		{
 			"mason-org/mason.nvim",
 			opts = {}
+		},
+		{
+			"github/copilot.vim"
 		}
 	},
 	-- Configure any other settings here. See the documentation for more details.
