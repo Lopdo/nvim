@@ -30,10 +30,11 @@ require("lazy").setup({
 			dependencies = { 'nvim-tree/nvim-web-devicons' }
 		},
 		-- import your plugins
+		{ import = "config.plugins.dap" },
 		{ import = "config.plugins" },
 		{
 			"vhyrro/luarocks.nvim",
-			priority = 1000, -- Very high priority is required, luarocks.nvim should run as the first plugin in your config.
+			priority = 1000,
 			config = true,
 		},
 		{
@@ -44,9 +45,10 @@ require("lazy").setup({
 			"github/copilot.vim"
 		}
 	},
-	-- Configure any other settings here. See the documentation for more details.
-	-- colorscheme that will be used when installing plugins.
-	-- install = { colorscheme = { "habamax" } },
-	-- automatically check for plugin updates
+	git = {
+		url = function(url)
+			return url:gsub("^git@github.com:", "https://github.com/")
+		end,
+	},
 	checker = { enabled = true },
 })

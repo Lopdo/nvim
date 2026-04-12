@@ -8,7 +8,24 @@ vim.keymap.set("v", "<space>x", ":lua<CR>")
 require('lualine').setup({})
 require("oil").setup()
 
-vim.opt.shiftwidth = 4
+local function double_escape()
+	local is_term = vim.api.nvim_buf_get_option(0, 'buftype') == 'terminal'
+	local term_job = vim.b.terminal_job_id
+
+	if is_term and term_job then
+		vim.cmd('bd!')
+		return
+	end
+
+	for _, win in ipairs(vim.fn.getwininfo()) do
+		if win.quickfix == 1 then
+			vim.cmd('cclose')
+			return
+		end
+	end
+end
+
+vim.keymap.set({ 'n', 't' }, '<esc><esc>', double_escape)
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.clipboard = "unnamedplus"

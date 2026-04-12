@@ -22,13 +22,7 @@ return {
 			vim.lsp.enable({ "lua_ls" })
 
 			vim.lsp.config("sourcekit", {
-				capabilities = {
-					workspace = {
-						didChangeWatchedFiles = {
-							dynamicRegistration = true,
-						},
-					},
-				},
+				capabilities = capabilities
 			})
 			vim.lsp.enable({ "sourcekit" })
 
@@ -46,8 +40,7 @@ return {
 					local c = vim.lsp.get_client_by_id(args.data.client_id)
 					if not c then return end
 
-					if vim.bo.filetype == "lua" then
-						-- Format the current buffer on save
+					if vim.bo.filetype == "lua" or vim.bo.filetype == "swift" then
 						vim.api.nvim_create_autocmd('BufWritePre', {
 							buffer = args.buf,
 							callback = function()
@@ -56,8 +49,19 @@ return {
 						})
 					end
 
-					vim.keymap.set('n', 'K', vim.lsp.buf.hover, { noremap = true, silent = true })
-					vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { noremap = true, silent = true })
+					local keymaps = {
+						{ key = 'K', fn = vim.lsp.buf.hover },
+						{ key = 'gd', fn = vim.lsp.buf.definition },
+						{ key = 'gr', fn = vim.lsp.buf.references },
+						{ key = 'gI', fn = vim.lsp.buf.implementation },
+						{ key = 'gD', fn = vim.lsp.buf.type_definition },
+						{ key = '<leader>cr', fn = vim.lsp.buf.rename },
+						{ key = '<leader>ca', fn = vim.lsp.buf.code_action },
+					}
+
+					for _, km in ipairs(keymaps) do
+						vim.keymap.set('n', km.key, km.fn, { noremap = true, silent = true, buffer = args.buf })
+					end
 				end,
 			})
 		end,
