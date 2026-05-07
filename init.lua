@@ -1,3 +1,10 @@
+-- Native 0.12 completion settings
+vim.opt.completeopt = { "menuone", "noinsert", "popup" }
+vim.keymap.set('i', '<C-Space>', vim.lsp.completion.get, { desc = "Trigger LSP completion" })
+
+-- Enable experimental ui2 (0.12 feature)
+require('vim._core.ui2').enable()
+
 require("config.lazy")
 require("config.diagnostics")
 
@@ -9,7 +16,7 @@ require('lualine').setup({})
 require("oil").setup()
 
 local function double_escape()
-	local is_term = vim.api.nvim_buf_get_option(0, 'buftype') == 'terminal'
+	local is_term = vim.bo.buftype == 'terminal'
 	local term_job = vim.b.terminal_job_id
 
 	if is_term and term_job then
@@ -25,7 +32,7 @@ local function double_escape()
 	end
 end
 
-vim.keymap.set({ 'n', 't' }, '<esc><esc>', double_escape)
+vim.keymap.set({ 'n', 't' }, '<leader><esc>', double_escape)
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.clipboard = "unnamedplus"

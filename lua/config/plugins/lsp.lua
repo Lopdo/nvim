@@ -15,16 +15,34 @@ return {
 			}
 		},
 		config = function()
-			local capabilities = require('blink.cmp').get_lsp_capabilities()
 			vim.lsp.config("lua_ls", {
-				capabilities = capabilities
+				capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), {
+					textDocument = {
+						completion = {
+							completionItem = {
+								snippetSupport = true,
+							},
+						},
+					},
+				}),
 			})
 			vim.lsp.enable({ "lua_ls" })
 
 			vim.lsp.config("sourcekit", {
-				capabilities = capabilities
+				capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), {
+					textDocument = {
+						completion = {
+							completionItem = {
+								snippetSupport = true,
+							},
+						},
+					},
+				}),
 			})
 			vim.lsp.enable({ "sourcekit" })
+			-- temporarily disabled until bug is fixed
+			-- https://github.com/swiftlang/sourcekit-lsp/issues/2021
+			-- vim.lsp.inlay_hint.enable(false)
 
 			vim.diagnostic.config({
 				virtual_text = true,
@@ -39,6 +57,13 @@ return {
 				callback = function(args)
 					local c = vim.lsp.get_client_by_id(args.data.client_id)
 					if not c then return end
+
+					-- Enable native LSP completion (0.12 feature)
+					if c:supports_method('textDocument/completion') then
+						vim.lsp.completion.enable(true, c.id, args.buf, {
+							autotrigger = true,
+						})
+					end
 
 					if vim.bo.filetype == "lua" or vim.bo.filetype == "swift" then
 						vim.api.nvim_create_autocmd('BufWritePre', {
