@@ -2,6 +2,8 @@
 vim.opt.completeopt = { "menuone", "noinsert", "popup" }
 vim.keymap.set('i', '<C-Space>', vim.lsp.completion.get, { desc = "Trigger LSP completion" })
 
+vim.opt.exrc = true
+
 -- Enable experimental ui2 (0.12 feature)
 require('vim._core.ui2').enable()
 
@@ -13,7 +15,6 @@ vim.keymap.set("n", "<space>x", ":.lua<CR>")
 vim.keymap.set("v", "<space>x", ":lua<CR>")
 
 require('lualine').setup({})
-require("oil").setup()
 
 local function double_escape()
 	local is_term = vim.bo.buftype == 'terminal'
